@@ -27,3 +27,11 @@ with:
     Second flaky line
   command: ./run_tests.sh
 ```
+
+## Commands
+
+`npm install` to install dependencies.
+
+`npm run prepare` to build dist/index.js.
+
+`npm test` to run tests.
