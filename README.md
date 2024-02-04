@@ -1,6 +1,6 @@
 # retry
 
-Retries an Action step on failure or timeout. Determines if a failure is a flake based on the test output
+Retries an Action step on failure. Determines if a failure is a flake based on the test output
 
 ## Inputs
 
