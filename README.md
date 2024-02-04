@@ -222,7 +222,7 @@ name: Multi-line single-command Test
 uses: ./
 with:
   timeout_minutes: 1
-  max_attempts: 2
+  max_attempts: 3
   shell: cmd
   command: >-
     echo "this is
