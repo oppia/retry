@@ -1,3 +1,21 @@
+// Copyright 2024 The Oppia Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview Retry action test.
+ */
+
 import 'jest';
 
 import { runAction } from './action';
@@ -36,7 +54,7 @@ describe('retry', () => {
   it('retries, fails', async () => {
     const inputs: Inputs = {
       maxAttempts: 3,
-      command: `echo flake \\
+      command: `echo 'a line for a flake test' \\
                   && echo -n 1 >> ${fileName} \\
                   && false`,
       flakyTestOutputLines: ['another_flake', 'flake'],
@@ -59,7 +77,7 @@ describe('retry', () => {
     assertFileContent(fileName, '1');
   });
 
-  it('succeeds without flaky lines', async () => {
+  it('succeeds with empty flaky lines', async () => {
     const inputs: Inputs = {
       maxAttempts: 3,
       command: `echo -n 1 >> ${fileName}`,
@@ -105,9 +123,10 @@ describe('retry', () => {
     const secondFileName = createTempFile('flaky_string');
     const inputs: Inputs = {
       maxAttempts: 3,
-      // The first execution will output flaky_string.
-      // The second execution will output 1 and should not be considered
-      // as a flake.
+      // The first execution will output "flaky_string".
+      // The second execution will output "1"
+      // because we overwrite the second file with "1" during the first execution.
+      // The second execution should not be treated as a flake.
       command: `cat ${secondFileName} \\
                   && echo 1 > ${secondFileName} \\
                   && echo -n 1 >> ${fileName} \\

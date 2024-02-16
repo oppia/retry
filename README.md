@@ -12,9 +12,9 @@ Retries an Action step on failure. Determines if a failure is a flake based on t
 
 **Required** The command to run
 
-### `flaky_test_output_lines`
+### `substrings_indicating_flaky_execution`
 
-**Optional** Specify which lines in output indicate that the failure is flaky. Note - if not specified, all failures are considered as real failures.
+**Optional** Execution is considered a flake if any output line contains any of these lines as a substring. Note - if not specified, all failures are considered as real failures.
 
 ## Examples
 
@@ -22,9 +22,9 @@ Retries an Action step on failure. Determines if a failure is a flake based on t
 uses: oppia/retry@develop
 with:
   max_attempts: 2
-  flaky_test_output_lines: |
-    First flaky line
-    Second flaky line
+  substrings_indicating_flaky_execution: |
+    First flaky substring
+    Second flaky substring
   command: ./run_tests.sh
 ```
 

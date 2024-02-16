@@ -1,5 +1,5 @@
 name: Retry Step
-description: 'Retry a step on failure or timeout'
+description: 'Retry a step on failure'
 inputs:
   max_attempts:
     description: Number of attempts to make before failing the step
@@ -8,7 +8,7 @@ inputs:
   command:
     description: The command to run
     required: true
-  flaky_test_output_lines:
+  substrings_indicating_flaky_execution:
     description: Specify which lines in output indicate that the failure is flaky. Note - if not specified, all failures are considered as real failures.
     required: false
 runs:

@@ -24823,7 +24823,7 @@ function runCommand(inputs) {
                         (0, core_1.debug)("Code: ".concat(code));
                         if (code === null) {
                             (0, core_1.error)('exit code cannot be null');
-                            exitCode = -1;
+                            exitCode = 1;
                             return;
                         }
                         exitCode = code;
@@ -24848,8 +24848,8 @@ function runCommand(inputs) {
         });
     });
 }
-function hasFlakyOutput(flaky_test_output_lines, output) {
-    var flakyIndicator = flaky_test_output_lines.find(function (flakyLine) {
+function hasFlakyOutput(substrings_indicating_flaky_execution, output) {
+    var flakyIndicator = substrings_indicating_flaky_execution.find(function (flakyLine) {
         return output.some(function (outputLine) { return outputLine.includes(flakyLine); });
     });
     if (flakyIndicator === undefined) {
@@ -24918,7 +24918,7 @@ exports.getInputNumber = getInputNumber;
 function getInputs() {
     var max_attempts = getInputNumber('max_attempts');
     var command = (0, core_1.getInput)('command', { required: true });
-    var flakyTestOutputLines = (0, core_1.getMultilineInput)('flaky_test_output_lines');
+    var flakyTestOutputLines = (0, core_1.getMultilineInput)('substrings_indicating_flaky_execution');
     return {
         maxAttempts: max_attempts,
         command: command,

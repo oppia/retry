@@ -63,7 +63,7 @@ async function runCommand(inputs: Inputs): Promise<CommandResult> {
 
     if (code === null) {
       error('exit code cannot be null');
-      exitCode = -1;
+      exitCode = 1;
       return;
     }
 
@@ -83,8 +83,11 @@ async function runCommand(inputs: Inputs): Promise<CommandResult> {
   };
 }
 
-function hasFlakyOutput(flaky_test_output_lines: string[], output: string[]): boolean {
-  const flakyIndicator = flaky_test_output_lines.find((flakyLine) =>
+function hasFlakyOutput(
+  substrings_indicating_flaky_execution: string[],
+  output: string[]
+): boolean {
+  const flakyIndicator = substrings_indicating_flaky_execution.find((flakyLine) =>
     output.some((outputLine) => outputLine.includes(flakyLine))
   );
   if (flakyIndicator === undefined) {
