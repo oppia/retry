@@ -26834,7 +26834,7 @@ var inputs = (0, inputs_1.getInputs)();
     .then(function (exitCode) { return process.exit(exitCode); })
     .catch(function (err) {
     (0, core_1.error)("Failed test with exception ".concat(err.message));
-    process.exit(-1);
+    process.exit(1);
 });
 
 })();
