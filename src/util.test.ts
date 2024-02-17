@@ -16,7 +16,7 @@ describe('util', () => {
   test('wait', async () => {
     const waitTime = 1000;
     wait(waitTime);
-    expect(setTimeout).toHaveBeenCalledTimes(5);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), waitTime);
   });
 });
