@@ -24853,10 +24853,9 @@ function hasFlakyOutput(substrings_indicating_flaky_execution, output) {
         return output.some(function (outputLine) { return outputLine.includes(flakyLine); });
     });
     if (flakyIndicator === undefined) {
-        (0, core_1.info)("Output doesn't contain flaky lines");
         return false;
     }
-    (0, core_1.info)("Output contains flaky line: ".concat(flakyIndicator));
+    (0, core_1.info)("Found flaky indicator: ".concat(flakyIndicator));
     return true;
 }
 function runAction(inputs) {
@@ -24881,9 +24880,11 @@ function runAction(inputs) {
                     if (attempt == inputs.maxAttempts) {
                         return [2 /*return*/, exitCode];
                     }
-                    if (!hasFlakyOutput(inputs.flakyTestOutputLines, output)) {
+                    if (!hasFlakyOutput(inputs.substringsIndicatingFlakyExecution, output)) {
+                        (0, core_1.info)("Output doesn't contain flaky indicators, considering it a failure");
                         return [2 /*return*/, exitCode];
                     }
+                    (0, core_1.info)('Output contains flaky indicators, restarting the test');
                     _b.label = 3;
                 case 3:
                     attempt++;
@@ -24918,11 +24919,11 @@ exports.getInputNumber = getInputNumber;
 function getInputs() {
     var max_attempts = getInputNumber('max_attempts');
     var command = (0, core_1.getInput)('command', { required: true });
-    var flakyTestOutputLines = (0, core_1.getMultilineInput)('substrings_indicating_flaky_execution');
+    var substringsIndicatingFlakyExecution = (0, core_1.getMultilineInput)('substrings_indicating_flaky_execution');
     return {
         maxAttempts: max_attempts,
         command: command,
-        flakyTestOutputLines: flakyTestOutputLines,
+        substringsIndicatingFlakyExecution: substringsIndicatingFlakyExecution,
     };
 }
 exports.getInputs = getInputs;

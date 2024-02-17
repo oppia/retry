@@ -57,7 +57,7 @@ describe('retry', () => {
       command: `echo 'a line for a flake test' \\
                   && echo -n 1 >> ${fileName} \\
                   && false`,
-      flakyTestOutputLines: ['another_flake', 'flake'],
+      substringsIndicatingFlakyExecution: ['another_flake', 'flake'],
     };
     const exitCode = await runAction(inputs);
     expect(exitCode).toBe(1);
@@ -69,7 +69,7 @@ describe('retry', () => {
     const inputs: Inputs = {
       maxAttempts: 3,
       command: `echo -n 1 >> ${fileName}`,
-      flakyTestOutputLines: ['flake'],
+      substringsIndicatingFlakyExecution: ['flake'],
     };
     const exitCode = await runAction(inputs);
     expect(exitCode).toBe(0);
@@ -81,7 +81,7 @@ describe('retry', () => {
     const inputs: Inputs = {
       maxAttempts: 3,
       command: `echo -n 1 >> ${fileName}`,
-      flakyTestOutputLines: [],
+      substringsIndicatingFlakyExecution: [],
     };
     const exitCode = await runAction(inputs);
     expect(exitCode).toBe(0);
@@ -96,7 +96,7 @@ describe('retry', () => {
       command: `echo flake \\
                   && echo -n 1 >> ${fileName} \\
                   && grep 11 ${fileName}`,
-      flakyTestOutputLines: ['flake'],
+      substringsIndicatingFlakyExecution: ['flake'],
     };
     const exitCode = await runAction(inputs);
     expect(exitCode).toBe(0);
@@ -110,7 +110,7 @@ describe('retry', () => {
       command: `echo -n 1 >> ${fileName} \\
                   && echo 'real error, not flaky' \\
                   && false`,
-      flakyTestOutputLines: ['flaky_string'],
+      substringsIndicatingFlakyExecution: ['flaky_string'],
     };
     const exitCode = await runAction(inputs);
     expect(exitCode).toBe(1);
@@ -131,7 +131,7 @@ describe('retry', () => {
                   && echo 1 > ${secondFileName} \\
                   && echo -n 1 >> ${fileName} \\
                   && false`,
-      flakyTestOutputLines: ['flaky_string'],
+      substringsIndicatingFlakyExecution: ['flaky_string'],
     };
     const exitCode = await runAction(inputs);
     expect(exitCode).toBe(1);

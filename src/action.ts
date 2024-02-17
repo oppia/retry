@@ -91,10 +91,9 @@ function hasFlakyOutput(
     output.some((outputLine) => outputLine.includes(flakyLine))
   );
   if (flakyIndicator === undefined) {
-    info("Output doesn't contain flaky lines");
     return false;
   }
-  info(`Output contains flaky line: ${flakyIndicator}`);
+  info(`Found flaky indicator: ${flakyIndicator}`);
   return true;
 }
 
@@ -112,9 +111,11 @@ export async function runAction(inputs: Inputs): Promise<number> {
       return exitCode;
     }
 
-    if (!hasFlakyOutput(inputs.flakyTestOutputLines, output)) {
+    if (!hasFlakyOutput(inputs.substringsIndicatingFlakyExecution, output)) {
+      info("Output doesn't contain flaky indicators, considering it a failure");
       return exitCode;
     }
+    info('Output contains flaky indicators, restarting the test');
   }
   throw new Error('Unreachable');
 }
