@@ -48,7 +48,7 @@ jobs:
         id: flake
         uses: ./
         with:
-          max_attempts: 1
+          max_attempts: 2
           substrings_indicating_flaky_execution: |
             flake_error
           command: |
@@ -57,7 +57,7 @@ jobs:
               && grep 11 /tmp/retry_github_action_happy
 
   unhappy_integration_tests:
-    name: Run Integration Tests with commands that succeed
+    name: Run Integration Tests with commands that fail
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -79,7 +79,7 @@ jobs:
 
       - name: Write success if step failed
         id: success_if_failed
-        if: ${{ failure() }}
+        if: steps.failing_command.outcome != 'success'
         run: touch /tmp/retry_github_action_unhappy_success
 
       - name: Exit
