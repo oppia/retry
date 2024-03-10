@@ -80,7 +80,7 @@ jobs:
       - name: Write success if step failed
         id: success_if_failed
         if: steps.failing_command.outcome != 'success'
-        run: touch /tmp/retry_gihub_action_unhappy_success
+        run: touch /tmp/retry_github_action_unhappy_success
 
       - name: Exit
         id: exit
