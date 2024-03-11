@@ -23,3 +23,65 @@ jobs:
         run: npm ci
       - name: Run Unit Tests
         run: npm test
+
+  happy_integration_tests:
+    name: Run Integration Tests with commands that succeed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Happy path
+        id: happy_path
+        uses: ./
+        with:
+          max_attempts: 1
+          command: exit 0
+
+      - name: Run a command that fails only on the first execution
+        id: flake
+        uses: ./
+        with:
+          max_attempts: 2
+          substrings_indicating_flaky_execution: |
+            flake_error
+          command: |
+            echo flake_error \
+              && echo -n 1 >> /tmp/retry_github_action_happy \
+              && grep 11 /tmp/retry_github_action_happy
+
+  unhappy_integration_tests:
+    name: Run Integration Tests with commands that fail
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Failing command
+        id: failing_command
+        uses: ./
+        continue-on-error: true
+        with:
+          max_attempts: 1
+          command: exit 1
+
+      - name: Write success if step failed
+        id: success_if_failed
+        if: steps.failing_command.outcome != 'success'
+        run: touch /tmp/retry_github_action_unhappy_success
+
+      - name: Exit
+        id: exit
+        run: ls /tmp/retry_github_action_unhappy_success
